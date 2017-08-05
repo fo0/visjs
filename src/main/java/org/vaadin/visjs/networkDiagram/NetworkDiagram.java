@@ -13,6 +13,7 @@ import com.vaadin.ui.JavaScriptFunction;
 import elemental.json.JsonArray;
 import elemental.json.JsonException;
 import elemental.json.JsonObject;
+import elemental.json.JsonType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,11 @@ import java.util.List;
 
 /**
  * Created by roshans on 10/10/14.
+ * Added callback function for manipulation object by @trobar 4.8.2017
  */
 
-@JavaScript({"js/vis.min.js", "js/networkDiagram-connector.js"})
-@StyleSheet({"css/vis.min.css", "css/networkDiagram.css"})
+@JavaScript({"vis.min.js", "networkDiagram-connector.js"})
+@StyleSheet({"vis.min.css", "networkDiagram.css"})
 public class NetworkDiagram extends AbstractJavaScriptComponent {
     private List<Node.NodeSelectListener> nodeSelectListeners = new ArrayList<>();
     private List<Node.NodeClickListener> nodeClickListeners = new ArrayList<>();
@@ -125,10 +127,82 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
                 //fireGraphResizeEvent();
             }
         });
-
+        addFunction(Constants.ON_MANIPULATION_NODEADDED, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	if (properties.length()>0) {
+            		debugPrintJsonProperties(Constants.ON_MANIPULATION_NODEADDED,properties.getObject(0));
+            	}
+            }
+        });
+        addFunction(Constants.ON_MANIPULATION_EDGEADDED, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	if (properties.length()>0) {
+            		debugPrintJsonProperties(Constants.ON_MANIPULATION_EDGEADDED,properties.getObject(0));
+            	}
+            }
+        });
+        addFunction(Constants.ON_MANIPULATION_NODEDELETED, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	if (properties.length()>0) {
+            		System.out.println(properties.length());
+            		debugPrintJsonProperties(Constants.ON_MANIPULATION_NODEDELETED,properties.getObject(0));
+            	}
+            }
+        });
+        addFunction(Constants.ON_MANIPULATION_EDGEDELETED, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	if (properties.length()>0) {
+            		debugPrintJsonProperties(Constants.ON_MANIPULATION_EDGEDELETED,properties.getObject(0));
+            	}
+            }
+        });
+        
+        setCustomEdgeIfAdded(true,"sdf","fgh");
+        
+        System.out.println(gson.toJson(options));
+        
         callFunction("init", gson.toJson(options));
+        
+        
+        
     }
+    
+    private void debugPrintJsonProperties(String header,JsonObject properties){
+    	
+    		for (String key:properties.keys()) {
+    			JsonType type=properties.get(key).getType();
+    			String value="";
+    			if (type==JsonType.STRING) {
+    				value=properties.getString(key);
+    			} else if (type==JsonType.NUMBER) {
+    				value=String.valueOf(properties.getNumber(key));
+    			} else if (type==JsonType.BOOLEAN) {
+    				value=String.valueOf(properties.getBoolean(key));
+    			} else if (type==JsonType.ARRAY) {
+    				JsonArray ar=properties.get(key);
+    				for (int i=0;i<ar.length();i++) {
+    					if (ar.get(i).getType()==JsonType.STRING) {
+    						value+=" "+ar.getString(i);
+    					}
+    				}
+    			}
+    			System.out.println(header+": "+key+":"+value);
+    		}
 
+    }
+    
+      
+
+    public void setCustomNodeIfAdded(boolean activate,String id,String label) {
+    	callFunction("setCustomNodeIfAdded", activate,id,label);
+    }
+    public void setCustomEdgeIfAdded(boolean activate,String id,String label) {
+    	callFunction("setCustomEdgeIfAdded", activate,id,label);
+    }
 
     public NetworkDiagramState getState() {
         return (NetworkDiagramState) super.getState();
@@ -180,18 +254,8 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         callFunction("updateEdge", gson.toJson(edges));
     }
 
-    @Deprecated
-    public void updateEdge(List<Edge> edges) {
-        updateEdges(edges);
-    }
-
     public void updateEdges(List<Edge> edges) {
         callFunction("updateEdge", gson.toJson(edges));
-    }
-
-    @Deprecated
-    public void updateNode(List<Node> nodes) {
-        updateNodes(nodes);
     }
 
     public void updateNodes(List<Node> nodes) {

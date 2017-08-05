@@ -1,9 +1,16 @@
 package org.vaadin.visjs.networkDiagram.options;
 
 import org.vaadin.visjs.networkDiagram.options.cluster.Cluster;
+import org.vaadin.visjs.networkDiagram.options.edges.ArrowHead;
+import org.vaadin.visjs.networkDiagram.options.edges.Arrows;
 import org.vaadin.visjs.networkDiagram.options.edges.Edges;
+import org.vaadin.visjs.networkDiagram.options.edges.Layout;
+import org.vaadin.visjs.networkDiagram.options.nodes.Icon;
+import org.vaadin.visjs.networkDiagram.options.nodes.Nodes;
 import org.vaadin.visjs.networkDiagram.options.physics.Physics;
+import org.vaadin.visjs.networkDiagram.util.Shape;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -12,110 +19,88 @@ import java.util.List;
 public class Options {
 
     private boolean clickToUse = false;
-    private boolean configurePhysics = false;
-    private boolean hover = true;
-    private boolean dragNetwork = true;
-    private boolean dragNodes = true;
-    private boolean hideNodesOnDrag = false;
-    private boolean hideEdgesOnDrag = false;
-    private boolean selectable = true;
-    private boolean stabilize = true;
-    private boolean zoomable = true;
-
-    private String height = "100%";
-    private String width = "100%";
-
-    private int stabilizationIterations = 1000;
+    private boolean autoResize = false;
+    private String locale = "en";
+    private String height = "300px";
+    private String width = "300px";
+    private HashMap<String,Locale> locales= new HashMap<String,Locale>();
+    private Configure configure;
+    private Manipulation manipulation;   
+    private Interaction interaction;   
+    
+    public Options(){
+    	configure=new Configure();
+    	manipulation=new Manipulation();
+    	interaction=new Interaction();
+    	locales.put("en", new Locale());
+    	Arrows ar=new Arrows();
+    	ArrowHead arh=new ArrowHead();
+    	arh.setEnabled(true);
+    	ar.setTo(arh);
+    	edges=new Edges();
+    	edges.setArrows(ar);
+    	
+    	nodes=new Nodes();
+    	nodes.setIcon(new Icon());
+    	nodes.setShape(Shape.icon);
+    }
+    
+    //private int stabilizationIterations = 1000;
 
     private Physics physics;
-    private Options options;
-
-    //private SmoothCurves smoothCurves;
-    private boolean smoothCurves = false;
     private Edges edges;
     private Nodes nodes;
-    private Cluster clustering;
+    //private Cluster clustering;
 
-    private HierarchicalLayout hierarchicalLayout;
+    private Layout layout;
+    
 
-    public boolean isClickToUse() {
+	public Interaction getInteraction() {
+		return interaction;
+	}
+
+	public void setInteraction(Interaction interaction) {
+		this.interaction = interaction;
+	}
+  	
+	public boolean isAutoResize() {
+		return autoResize;
+	}
+
+	public void setAutoResize(boolean autoResize) {
+		this.autoResize = autoResize;
+	}
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
+
+	public Configure getConfigure() {
+		return configure;
+	}
+
+	public void setConfigure(Configure configure) {
+		this.configure = configure;
+	}
+
+	public Manipulation getManipulation() {
+		return manipulation;
+	}
+	
+	public void setManipulation(Manipulation manipulation) {
+		this.manipulation = manipulation;
+	}
+
+	public boolean isClickToUse() {
         return clickToUse;
     }
 
     public void setClickToUse(boolean clickToUse) {
         this.clickToUse = clickToUse;
-    }
-
-    public boolean isConfigurePhysics() {
-        return configurePhysics;
-    }
-
-    public void setConfigurePhysics(boolean configurePhysics) {
-        this.configurePhysics = configurePhysics;
-    }
-
-    public boolean isHover() {
-        return hover;
-    }
-
-    public void setHover(boolean hover) {
-        this.hover = hover;
-    }
-
-    public boolean isDragNetwork() {
-        return dragNetwork;
-    }
-
-    public void setDragNetwork(boolean dragNetwork) {
-        this.dragNetwork = dragNetwork;
-    }
-
-    public boolean isDragNodes() {
-        return dragNodes;
-    }
-
-    public void setDragNodes(boolean dragNodes) {
-        this.dragNodes = dragNodes;
-    }
-
-    public boolean isHideNodesOnDrag() {
-        return hideNodesOnDrag;
-    }
-
-    public void setHideNodesOnDrag(boolean hideNodesOnDrag) {
-        this.hideNodesOnDrag = hideNodesOnDrag;
-    }
-
-    public boolean isHideEdgesOnDrag() {
-        return hideEdgesOnDrag;
-    }
-
-    public void setHideEdgesOnDrag(boolean hideEdgesOnDrag) {
-        this.hideEdgesOnDrag = hideEdgesOnDrag;
-    }
-
-    public boolean isSelectable() {
-        return selectable;
-    }
-
-    public void setSelectable(boolean selectable) {
-        this.selectable = selectable;
-    }
-
-    public boolean isStabilize() {
-        return stabilize;
-    }
-
-    public void setStabilize(boolean stabilize) {
-        this.stabilize = stabilize;
-    }
-
-    public boolean isZoomable() {
-        return zoomable;
-    }
-
-    public void setZoomable(boolean zoomable) {
-        this.zoomable = zoomable;
     }
 
     public String getHeight() {
@@ -134,67 +119,46 @@ public class Options {
         this.width = width;
     }
 
-    public int getStabilizationIterations() {
-        return stabilizationIterations;
-    }
+	public HashMap<String, Locale> getLocales() {
+		return locales;
+	}
 
-    public void setStabilizationIterations(int stabilizationIterations) {
-        this.stabilizationIterations = stabilizationIterations;
-    }
+	public void setLocales(HashMap<String, Locale> locales) {
+		this.locales = locales;
+	}
 
-    public Physics getPhysics() {
-        return physics;
-    }
+	public Physics getPhysics() {
+		return physics;
+	}
 
-    public void setPhysics(Physics physics) {
-        this.physics = physics;
-    }
+	public void setPhysics(Physics physics) {
+		this.physics = physics;
+	}
 
-    public Options getOptions() {
-        return options;
-    }
+	public Edges getEdges() {
+		return edges;
+	}
 
-    public void setOptions(Options options) {
-        this.options = options;
-    }
+	public void setEdges(Edges edges) {
+		this.edges = edges;
+	}
 
-    public boolean getSmoothCurves() {
-        return smoothCurves;
-    }
+	public Nodes getNodes() {
+		return nodes;
+	}
 
-    public void setSmoothCurves(boolean smoothCurves) {
-        this.smoothCurves = smoothCurves;
-    }
+	public void setNodes(Nodes nodes) {
+		this.nodes = nodes;
+	}
 
-    public Edges getEdges() {
-        return edges;
-    }
+	public Layout getLayout() {
+		return layout;
+	}
 
-    public void setEdges(Edges edges) {
-        this.edges = edges;
-    }
+	public void setLayout(Layout layout) {
+		this.layout = layout;
+	}
+    
+    
 
-    public Nodes getNodes() {
-        return nodes;
-    }
-
-    public void setNodes(Nodes nodes) {
-        this.nodes = nodes;
-    }
-
-    public Cluster getClustering() {
-        return clustering;
-    }
-
-    public void setClustering(Cluster clustering) {
-        this.clustering = clustering;
-    }
-
-    public HierarchicalLayout getHierarchicalLayout() {
-        return hierarchicalLayout;
-    }
-
-    public void setHierarchicalLayout(HierarchicalLayout hierarchicalLayout) {
-        this.hierarchicalLayout = hierarchicalLayout;
-    }
 }

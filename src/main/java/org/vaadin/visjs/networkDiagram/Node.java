@@ -3,6 +3,8 @@ package org.vaadin.visjs.networkDiagram;
 import com.google.gson.annotations.SerializedName;
 import org.vaadin.visjs.networkDiagram.event.node.*;
 import org.vaadin.visjs.networkDiagram.listener.NodeListener;
+import org.vaadin.visjs.networkDiagram.util.Color;
+import org.vaadin.visjs.networkDiagram.util.Shape;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,21 +71,21 @@ public class Node {
         this.shape = Shape.image;
     }
 
-    public Node(int id, String label, Node.Shape shape,String group){
+    public Node(int id, String label, Shape shape,String group){
         this.id = Integer.toString(id);;
         this.label = label;
         this.shape = shape;
         this.group = group;
     }
 
-    public Node(String id, String label, Node.Shape shape,String group){
+    public Node(String id, String label, Shape shape,String group){
         this.id = id;
         this.label = label;
         this.shape = shape;
         this.group = group;
     }
 
-    public Node(int id, String label, Node.Shape shape,String group,String image){
+    public Node(int id, String label, Shape shape,String group,String image){
         this.id = Integer.toString(id);;
         this.label = label;
         this.shape = shape;
@@ -92,7 +94,7 @@ public class Node {
         this.shape = Shape.image;
     }
 
-    public Node(String id, String label, Node.Shape shape,String group,String image){
+    public Node(String id, String label, Shape shape,String group,String image){
         this.id = id;
         this.label = label;
         this.shape = shape;
@@ -319,31 +321,7 @@ public class Node {
         this.edgeMap = edgeMap;
     }
 
-    public static enum Shape {
-        @SerializedName("ellipse")
-        ellipse,
-        @SerializedName("circle")
-        circle,
-        @SerializedName("box")
-        box,
-        @SerializedName("database")
-        database,
-        @SerializedName("image")
-        image,
-        @SerializedName("label")
-        label,
-        @SerializedName("dot")
-        dot,
-        @SerializedName("star")
-        star,
-        @SerializedName("triangle")
-        triangle,
-        @SerializedName("triangleDown")
-        triangleDown,
-        @SerializedName("square")
-        square;
-    }
-
+    
     public static abstract class NodeSelectListener extends NodeListener {
         public NodeSelectListener(Node node) {
             super(node);

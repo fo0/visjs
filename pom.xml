@@ -6,11 +6,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.vaadin.addon</groupId>
     <artifactId>visjs-addon</artifactId>
-    <version>1.0.1.0</version>
+    <version>2.0.0.0</version>
     <packaging>jar</packaging>
     <properties>
-        <vaadin.version>7.4.0</vaadin.version>
-        <JDK_VERSION>1.7</JDK_VERSION>
+        <vaadin.version>8.1.0</vaadin.version>
+        <JDK_VERSION>1.8</JDK_VERSION>
         <Implementation-Version>${project.version}</Implementation-Version>
         <Implementation-Title>${project.name}</Implementation-Title>
         <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
@@ -25,15 +25,15 @@
     </repositories>
 
     <organization>
-        <name>sameeraroshan</name>
-        <url>https://github.com/sameeraroshan/visjs</url>
+        <name>martinprause</name>
+        <url>https://github.com/trobar/visjs</url>
     </organization>
 
     <scm>
-        <url>https://github.com/sameeraroshan/visjs.git</url>
-        <connection>scm:git:https://github.com/sameeraroshan/visjs.git</connection>
-        <developerConnection>scm:git:https://github.com/sameeraroshan/visjs.git</developerConnection>
-        <tag>Visjs add-on for Vaadin</tag>
+        <url>https://github.com/trobar/visjs.git</url>
+        <connection>scm:git:https://github.com/trobar/visjs.git</connection>
+        <developerConnection>scm:git:https://github.com/trobar/visjs.git</developerConnection>
+        <tag>Fork of the Visjs add-on for Vaadin</tag>
     </scm>
 
     <developers>
@@ -50,6 +50,18 @@
                 <role>team manager</role>
             </roles>
             <timezone>5.30</timezone>
+        </developer>
+         <developer>
+            <id>martinprause</id>
+            <name>Martin Prause</name>
+            <email>mt.prause@googlemail.com</email>
+            <!--<url>http://vaadin.com/web/sameeraroshan</url>-->
+            <!--<organization>Vaadin Ltd</organization>-->
+            <!--<organizationUrl>http://vaadin.com/</organizationUrl>-->
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>1.00</timezone>
         </developer>
     </developers>
 

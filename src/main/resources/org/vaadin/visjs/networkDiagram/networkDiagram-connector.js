@@ -10,6 +10,13 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
     var options = {"clickToUse" :"false"};
     var container;
     var self = this;
+    var customNodeifAdded =false;
+    var customNodeID;
+    var customNodeLabel;    
+    var customEdgeifAdded =false;
+    var customEdgeID;  
+    var customEdgeLabel;    
+    
 
     this.onStateChange = function(){
         graph.redraw();
@@ -17,6 +24,11 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
 
     this.init = function(o){
         options = JSON.parse(o);
+        options.manipulation.addNode=function(nodeData,callback) { if (customNodeifAdded==true) {nodeData.label=customNodeLabel;nodeData.id=customNodeID;} self.onManipulationNodeAdded(nodeData);callback(nodeData); };
+        options.manipulation.addEdge=function(edgeData,callback) { if (customEdgeifAdded==true) {edgeData.label=customEdgeLabel;edgeData.id=customEdgeID;} self.onManipulationEdgeAdded(edgeData);callback(edgeData); };
+        options.manipulation.deleteNode=function(nodeData,callback) { self.onManipulationNodeDeleted(nodeData);callback(nodeData); };
+        options.manipulation.deleteEdge=function(edgeData,callback) { self.onManipulationEdgeDeleted(edgeData);callback(edgeData); };
+
         nodes = new vis.DataSet();
         edges = new vis.DataSet();
         container = this.getElement();
@@ -59,10 +71,22 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
             graph.on('zoom',function(properties){
                 self.onZoom(properties);
                 });
-
+          
             graph.draw();
     };
-
+    
+    this.setCustomNodeIfAdded = function(b,s1,s2) {
+    	  customNodeifAdded=b;
+    	  customNodeID=s1;
+    	  customLabel=s2;    
+    }
+    
+    this.setCustomEdgeIfAdded = function(b,s1,s2) {
+        customEdgeifAdded=b;
+        customEdgeID=s1;  
+        customEdgeLabel=s2;    
+    }
+    
     this.updateOptions = function (o) {
         options = JSON.parse(o);
         graph.redraw();

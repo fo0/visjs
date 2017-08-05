@@ -1,6 +1,7 @@
 package org.vaadin.visjs.networkDiagram.options;
 
-import org.vaadin.visjs.networkDiagram.Color;
+import org.vaadin.visjs.networkDiagram.util.Color;
+import org.vaadin.visjs.networkDiagram.util.Shape;
 import org.vaadin.visjs.networkDiagram.Node;
 
 /**
@@ -13,7 +14,7 @@ public class Group {
     private String fontColor = "black";
     private String fontFace = "sans";
     private int fontSize = 14;
-    private Node.Shape shape = Node.Shape.ellipse;
+    private Shape shape = Shape.ellipse;
     private int radius = 5;
 
     public Color getColor() {
@@ -56,11 +57,11 @@ public class Group {
         this.fontSize = fontSize;
     }
 
-    public Node.Shape getShape() {
+    public Shape getShape() {
         return shape;
     }
 
-    public void setShape(Node.Shape shape) {
+    public void setShape(Shape shape) {
         this.shape = shape;
     }
 
