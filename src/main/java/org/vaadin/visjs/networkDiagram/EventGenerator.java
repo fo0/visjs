@@ -10,6 +10,7 @@ import elemental.json.JsonException;
 
 /**
  * Created by roshans on 11/30/14.
+ * Added HoverBlur,AddNode, AddEdge,DeleteNodesEdges generator by Martin prause 9.8.2017
  */
 public class EventGenerator {
 

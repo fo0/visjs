@@ -3,9 +3,9 @@ package org.vaadin.visjs.networkDiagram.listener;
 import org.vaadin.visjs.networkDiagram.event.ClickEvent;
 
 /**
- * Created by roshans on 11/25/14.
+ * Created by Martin Prause 9.8.2017
  */
-public abstract class GraphSelectListener {
+public interface GraphSelectListener {
 
-    public abstract void onFired(ClickEvent event);
+    public void onFired(ClickEvent event);
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * Created by roshans on 10/10/14.
+ * Removed nodeListener - now in network object, extends Node by Martin Prause 9.8.2017
  */
 public class Node extends Nodes {
 
@@ -20,6 +21,10 @@ public class Node extends Nodes {
     private transient List<Edge> edgeList = new ArrayList<>();;
     private transient Map<String, Edge> edgeMap = new HashMap<>();;
 
+    
+    public Node() {
+    	
+    }
     public Node(int id, String label) {
         this.id = Integer.toString(id);
         this.label = label;

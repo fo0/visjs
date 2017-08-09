@@ -3,6 +3,11 @@ package org.vaadin.visjs.networkDiagram.api;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Martin Prause 9.8.2017
+ */
+
+
 public class PreviousSelection {
 	private List<String> nodeIds;
 	private List<String> edgeIds;

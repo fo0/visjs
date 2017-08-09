@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * Created by roshans on 11/30/14.
+ * Addes previousSelection and pointer by Martin Prause 9.8.2017
  */
 public abstract class Event {
 	

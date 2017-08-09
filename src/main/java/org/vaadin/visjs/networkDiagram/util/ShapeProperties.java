@@ -1,5 +1,10 @@
 package org.vaadin.visjs.networkDiagram.util;
 
+/**
+ * Created by Martin Prause 9.8.2017
+ */
+
+
 public class ShapeProperties {
 	 private boolean borderDashes=false; // only for borders
 	 private int borderRadius=6;     // only for box shape

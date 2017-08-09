@@ -1,5 +1,10 @@
 package org.vaadin.visjs.networkDiagram.options.nodes;
 
+/**
+ * Created by Martin Prause 9.8.2017
+ */
+
+
 public class WidthConstraint {
     private int minimum;
     private int maximum;

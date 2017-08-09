@@ -1,5 +1,10 @@
 package org.vaadin.visjs.networkDiagram.options;
 
+/**
+ * Created by Martin Prause 5.8.2017
+ */
+
+
 public class Locale {
     private String edit="Edit";
     private String del="Delete selected";

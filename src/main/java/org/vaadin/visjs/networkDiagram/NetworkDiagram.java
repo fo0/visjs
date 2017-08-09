@@ -6,6 +6,7 @@ import org.vaadin.visjs.networkDiagram.event.ClickEvent;
 import org.vaadin.visjs.networkDiagram.event.DeleteNodesEdgesEvent;
 import org.vaadin.visjs.networkDiagram.event.HoverBlurEvent;
 import org.vaadin.visjs.networkDiagram.event.NetworkEvent;
+import org.vaadin.visjs.networkDiagram.listener.GraphDrawingListener;
 import org.vaadin.visjs.networkDiagram.listener.GraphListener;
 import org.vaadin.visjs.networkDiagram.listener.GraphSelectListener;
 import org.vaadin.visjs.networkDiagram.listener.ManipulationListener;
@@ -28,35 +29,42 @@ import java.util.List;
 
 /**
  * Created by roshans on 10/10/14.
- * Added callback function for manipulation object by @trobar 4.8.2017
+ * Added callback function, events and graph methods by Martin Prause 9.8.2017
  */
 
 @JavaScript({"vis.min.js", "networkDiagram-connector.js"})
 @StyleSheet({"vis.min.css", "networkDiagram.css"})
 public class NetworkDiagram extends AbstractJavaScriptComponent {
+	
+	
     
-	private SelectListener nodeSelectListeners;
-	private SelectListener edgeSelectListeners;
-	private SelectListener selectListener;
-	private ClickListener clickListener;
-	private DoubleClickListener doubleClickListener;
-	private OnContextListener onContextListener;
-	private HoldListener holdListener;
-	private ReleaseListener releaseListener;
-	private DeselectNodeListener deselectNodeListener;
-	private DeselectEdgeListener deselectEdgeListener;
-	private HoverNodeListener hoverNodeListener;
-	private BlurNodeListener blurNodeListener;
-	private HoverEdgeListener hoverEdgeListener;
-	private BlurEdgeListener blurEdgeListener;
-	private DragStartListener dragStartListener;
-	private DragEndListener dragEndListener;
-	private DraggingListener draggingListener;
-    private ResizeListener resizeListener;
-    private StabilizationStartListener stabilizationStartListener;
-    private StabilizedListener stabilizedListener;
-    private ZoomListener zoomListener;
+	private GraphSelectListener nodeSelectListeners;
+	private GraphSelectListener edgeSelectListeners;
+	private GraphSelectListener selectListener;
+	private GraphSelectListener clickListener;
+	private GraphSelectListener doubleClickListener;
+	private GraphSelectListener onContextListener;
+	private GraphSelectListener holdListener;
+	private GraphSelectListener releaseListener;
+	private GraphSelectListener deselectNodeListener;
+	private GraphSelectListener deselectEdgeListener;
+	private GraphListener hoverNodeListener;
+	private GraphListener blurNodeListener;
+	private GraphListener hoverEdgeListener;
+	private GraphListener blurEdgeListener;
+	private GraphSelectListener dragStartListener;
+	private GraphSelectListener dragEndListener;
+	private GraphSelectListener draggingListener;
+    private GraphListener resizeListener;
+    private GraphListener stabilizationStartListener;
+    private GraphListener stabilizedListener;
+    private GraphListener zoomListener;
     private ManipulationListener manipulationListener;
+    private GraphDrawingListener showPopupListener;
+    private GraphDrawingListener hidePopupListener;
+    private GraphDrawingListener initRedrawListener;
+    private GraphDrawingListener beforeDrawingListener;
+    private GraphDrawingListener afterDrawingListener;
     
     private Gson gson = new Gson();
 
@@ -272,6 +280,54 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
             }
         });
         
+        
+        addFunction(Constants.ON_GETSELECTION, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	if (properties.length()>0) {
+            		//AddEdgeEvent event = EventGenerator.getAddEdgeEventEvent(properties);
+            		//fireEditEdgeEvent(event);
+            		//debugPrintJsonProperties(Constants.ON_GETSELECTION,properties.getObject(0));
+            	}
+            }
+        });
+        
+        
+        addFunction(Constants.ON_SHOWPOPUP, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	fireShowPopupEvent();
+            }
+        });
+        
+        addFunction(Constants.ON_HIDEPOPUP, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	fireHidePopupEvent();
+            }
+        });
+        
+        addFunction(Constants.ON_INITREDRAW, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	fireInitRedrawListener();
+            }
+        });
+        
+        addFunction(Constants.ON_BEFOREDRAWING, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	fireBeforeDrawingListener();
+            }
+        });
+        
+        addFunction(Constants.ON_AFTERDRAWING, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	fireAfterDrawingListener();
+            }
+        });
+        
          
         //System.out.println(gson.toJson(options));
         
@@ -326,6 +382,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
 
     public void addNode(Node... node) {
         getState().updates++;
+        //System.out.println(gson.toJson(node));
         callFunction("addNodes", gson.toJson(node));
     }
 
@@ -342,7 +399,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
 
     public void addEdge(Edge... edges) {
         getState().updates++;
-        System.out.println(gson.toJson(edges));
+        //System.out.println(gson.toJson(edges));
         callFunction("addEdges", gson.toJson(edges));
     }
 
@@ -411,10 +468,31 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
     public void fit(){
     	callFunction("fit");
     }
+    public void getSelection(){
+    	callFunction("getSelection");
+    }
     
+    public void storePositions(){
+    	callFunction("storePositions");
+    }
     
+    public void moveNode(String nodeId,int x,int y){
+    	callFunction("moveNode",nodeId,x,y);
+    }
     
+    public void stabalize(int iterations){
+    	callFunction("stabalize",iterations);
+    }
     
+    public void releaseNode(){
+    	callFunction("releaseNode");
+    }
+    
+    public void unselectAll(){
+    	callFunction("unselectAll");
+    }
+   
+   
     public void clear() {
         clearEdges();
         clearNodes();
@@ -424,16 +502,10 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         callFunction("drawConnections");
     }
     
-   
-    
-
     //adding and removing graph listeners
    
     
-    
-    
-    
-    public void addSelectListener(SelectListener listener) {
+    public void addSelectListener(GraphSelectListener listener) {
         this.selectListener = listener;
     }
     
@@ -441,7 +513,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.selectListener = null;
     }
     
-    public void addNodeSelectListener(SelectListener listener) {
+    public void addNodeSelectListener(GraphSelectListener listener) {
         this.nodeSelectListeners = listener;
     }
     
@@ -449,7 +521,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.nodeSelectListeners = null;
     }
     
-    public void addEdgeSelectListener(SelectListener listener) {
+    public void addEdgeSelectListener(GraphSelectListener listener) {
         this.edgeSelectListeners = listener;
     }
     
@@ -457,7 +529,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.edgeSelectListeners = null;
     }
      
-    public void addClickListener(ClickListener listener) {
+    public void addClickListener(GraphSelectListener listener) {
         this.clickListener = listener;
     }
     
@@ -465,7 +537,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.clickListener = null;
     }
     
-    public void addDoubleClickListener(DoubleClickListener listener) {
+    public void addDoubleClickListener(GraphSelectListener listener) {
         this.doubleClickListener = listener;
     }
     
@@ -473,7 +545,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.doubleClickListener = null;
     }
     
-    public void addOnContextListener(OnContextListener listener) {
+    public void addOnContextListener(GraphSelectListener listener) {
         this.onContextListener = listener;
     }
     
@@ -481,7 +553,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.onContextListener = null;
     }
     
-    public void addHoldListener(HoldListener listener) {
+    public void addHoldListener(GraphSelectListener listener) {
         this.holdListener = listener;
     }
     
@@ -489,7 +561,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.holdListener = null;
     }
     
-    public void addReleaseListener(ReleaseListener listener) {
+    public void addReleaseListener(GraphSelectListener listener) {
         this.releaseListener = listener;
     }
     
@@ -497,7 +569,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.releaseListener = null;
     }
     
-    public void addDeselectNodeListener(DeselectNodeListener listener) {
+    public void addDeselectNodeListener(GraphSelectListener listener) {
         this.deselectNodeListener = listener;
     }
     
@@ -505,14 +577,14 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.deselectNodeListener = null;
     }
     
-    public void addDeselectEdgeListener(DeselectEdgeListener listener) {
+    public void addDeselectEdgeListener(GraphSelectListener listener) {
         this.deselectEdgeListener = listener;
     }
     
     public void removeDeselectEdgeListener() {
         this.deselectEdgeListener = null;
     }
-    public void addHoverNodeListener(HoverNodeListener listener) {
+    public void addHoverNodeListener(GraphListener listener) {
         this.hoverNodeListener = listener;
     }
     
@@ -520,7 +592,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.hoverNodeListener = null;
     }
     
-    public void addBlurNodeListener(BlurNodeListener listener) {
+    public void addBlurNodeListener(GraphListener listener) {
         this.blurNodeListener = listener;
     }
     
@@ -528,7 +600,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.blurNodeListener = null;
     }
     
-    public void addHoverEdgeListener(HoverEdgeListener listener) {
+    public void addHoverEdgeListener(GraphListener listener) {
         this.hoverEdgeListener = listener;
     }
     
@@ -536,7 +608,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.hoverEdgeListener = null;
     }
     
-    public void addBlurEdgeListener(BlurEdgeListener listener) {
+    public void addBlurEdgeListener(GraphListener listener) {
         this.blurEdgeListener = listener;
     }
     
@@ -544,7 +616,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.blurEdgeListener = null;
     }
     
-    public void addDragStartListener(DragStartListener listener) {
+    public void addDragStartListener(GraphSelectListener listener) {
         this.dragStartListener = listener;
     }
     
@@ -552,7 +624,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.dragStartListener = null;
     }
     
-    public void addDragEndListener(DragEndListener listener) {
+    public void addDragEndListener(GraphSelectListener listener) {
         this.dragEndListener = listener;
     }
     
@@ -560,7 +632,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.dragEndListener = null;
     }
     
-    public void addDraggingListener(DraggingListener listener) {
+    public void addDraggingListener(GraphSelectListener listener) {
         this.draggingListener = listener;
     }
     
@@ -576,20 +648,20 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.manipulationListener = null;
     }
     
-    public void addResizeListener(ResizeListener resizeListener) {
+    public void addResizeListener(GraphListener resizeListener) {
         this.resizeListener = resizeListener;
     }
 
-    public void addStabilizationStartListener(StabilizationStartListener stabilizationStartListener) {
+    public void addStabilizationStartListener(GraphListener stabilizationStartListener) {
         this.stabilizationStartListener = stabilizationStartListener;
     }
 
-    public void addStabilizedListener(StabilizedListener stabilizedListener) {
+    public void addStabilizedListener(GraphListener stabilizedListener) {
         this.stabilizedListener = stabilizedListener;
     }
 
   
-    public void addZoomListener(ZoomListener zoomListener) {
+    public void addZoomListener(GraphListener zoomListener) {
         this.zoomListener = zoomListener;
     }
 
@@ -608,71 +680,50 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
     public void removeZoomListener() {
         this.zoomListener = null;
     }
+    public void addShowPopupListener(GraphDrawingListener listener) {
+        this.showPopupListener = listener;
+    }
     
-
-
+    public void removeShowPopupListener() {
+        this.showPopupListener = null;
+    }
     
+    public void addHidePopupListener(GraphDrawingListener listener) {
+        this.hidePopupListener = listener;
+    }
+    
+    public void removeHidePopupListener() {
+        this.hidePopupListener = null;
+    }
+    
+    
+    public void addInitRedrawListener(GraphDrawingListener listener) {
+        this.initRedrawListener = listener;
+    }
+    
+    public void removeInitRedrawListener() {
+        this.initRedrawListener = null;
+    }
+    
+    public void addBeforeDrawingListener(GraphDrawingListener listener) {
+        this.beforeDrawingListener = listener;
+    }
+    
+    public void removeBeforeDrawingListener() {
+        this.beforeDrawingListener = null;
+    }
+    
+    public void addAfterDrawingListener(GraphDrawingListener listener) {
+        this.afterDrawingListener = listener;
+    }
+    
+    public void removeAfterDrawingListener() {
+        this.afterDrawingListener = null;
+    }
+  
 
     //listeners for entire graph
 
-    public static abstract class ResizeListener extends GraphListener {
-    }
-
-    public static abstract class StabilizationStartListener extends GraphListener {
-    }
-
-    public static abstract class StabilizedListener extends GraphListener {
-    }
-
-    public static abstract class ZoomListener extends GraphListener {
-    }
-    
-    public static abstract class SelectListener extends GraphSelectListener {
-    }
-    
-    public static abstract class ClickListener extends GraphSelectListener {
-    }
-    
-    public static abstract class DoubleClickListener extends GraphSelectListener {
-    }
-    
-    public static abstract class OnContextListener extends GraphSelectListener {
-    }
-    
-    public static abstract class HoldListener extends GraphSelectListener {
-    }
-    
-    public static abstract class ReleaseListener extends GraphSelectListener {
-    }
-    
-    public static abstract class DeselectNodeListener extends GraphSelectListener {
-    }
-    
-    public static abstract class DeselectEdgeListener extends GraphSelectListener {
-    }
-    
-    public static abstract class HoverNodeListener extends GraphListener {
-    }
-    
-    public static abstract class BlurNodeListener extends GraphListener {
-    }
-    
-    public static abstract class HoverEdgeListener extends GraphListener {
-    }
-    
-    public static abstract class BlurEdgeListener extends GraphListener {
-    }
-    
-    public static abstract class DragStartListener extends GraphSelectListener {
-    } 
-    
-    public static abstract class DragEndListener extends GraphSelectListener {
-    } 
-    
-    public static abstract class DraggingListener extends GraphSelectListener {
-    } 
-    
-  
     public void fireSelectEvent(ClickEvent event) {
         if (selectListener != null) {
         	selectListener.onFired(event);
@@ -824,6 +875,33 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
       }
   }
    
-   
+  public void fireShowPopupEvent() {
+  	  if (showPopupListener != null) {
+  		showPopupListener.onFired();
+        }
+    }
+  public void fireHidePopupEvent() {
+  	  if (hidePopupListener != null) {
+  		hidePopupListener.onFired();
+        }
+    }
+  
+  public void fireInitRedrawListener() {
+  	  if (initRedrawListener != null) {
+  		initRedrawListener.onFired();
+        }
+    }
+  
+  public void fireBeforeDrawingListener() {
+  	  if (beforeDrawingListener != null) {
+  		beforeDrawingListener.onFired();
+        }
+    }
+  
+  public void fireAfterDrawingListener() {
+  	  if (afterDrawingListener != null) {
+  		afterDrawingListener.onFired();
+        }
+    }
         
 }

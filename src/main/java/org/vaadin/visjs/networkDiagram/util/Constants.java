@@ -1,9 +1,10 @@
 package org.vaadin.visjs.networkDiagram.util;
 
+import org.vaadin.visjs.networkDiagram.listener.GraphDrawingListener;
 
 /**
  * Created by roshans on 11/30/14.
- * Callback functions on manipulation object added by @trobar 08/04/2017
+ * Added callback/event functions added by Martin Prause 4.8.2017
  */
 public class Constants {
     public static final String ON_SELECT = "onSelect";
@@ -33,6 +34,13 @@ public class Constants {
     public static final String ON_MANIPULATION_NODEDELETED = "onManipulationNodeDeleted";
     public static final String ON_MANIPULATION_EDGEDELETED = "onManipulationEdgeDeleted";
     public static final String ON_MANIPULATION_EDGEEDITED = "onManipulationEdgeEdited";
+    public static final String ON_GETSELECTION = "onGetSelection";
+    public static final String ON_SHOWPOPUP = "onShpwPopup";
+    public static final String ON_HIDEPOPUP = "onHidePopup";
+    public static final String ON_INITREDRAW = "onInitRedraw";
+    public static final String ON_BEFOREDRAWING = "onBeforeDrawing";
+    public static final String ON_AFTERDRAWING = "onAfterDrawing";
+    
     
   
 

@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by roshans on 10/10/14.
+ * Updated with new modules by Martin Prause 9.8.2017
  */
 public class Options {
 
@@ -27,12 +28,14 @@ public class Options {
     private Configure configure;
     private Manipulation manipulation;   
     private Interaction interaction;   
+    private Groups groups;
     
     public Options(){
     	configure=new Configure();
     	manipulation=new Manipulation();
     	interaction=new Interaction();
     	locales.put("en", new Locale());
+    	groups=new Groups();
     	Arrows ar=new Arrows(new ArrowHead());
      	edges=new Edges();
     	edges.setArrows(ar);
@@ -47,6 +50,15 @@ public class Options {
 
     private Layout layout;
     
+    
+
+	public Groups getGroups() {
+		return groups;
+	}
+
+	public void setGroups(Groups groups) {
+		this.groups = groups;
+	}
 
 	public Interaction getInteraction() {
 		return interaction;

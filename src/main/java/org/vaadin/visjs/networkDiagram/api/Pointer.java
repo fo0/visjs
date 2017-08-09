@@ -1,5 +1,10 @@
 package org.vaadin.visjs.networkDiagram.api;
 
+/**
+ * Created by Martin Prause 9.8.2017
+ */
+
+
 public class Pointer {
 
 	Coordinates DOM;

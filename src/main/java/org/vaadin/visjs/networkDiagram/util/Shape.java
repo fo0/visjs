@@ -2,6 +2,11 @@ package org.vaadin.visjs.networkDiagram.util;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Created by Martin Prause 9.8.2017
+ */
+
+
 public enum Shape {
 	   @SerializedName("ellipse")
        ellipse,

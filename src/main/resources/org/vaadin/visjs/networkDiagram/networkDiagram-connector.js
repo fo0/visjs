@@ -102,6 +102,27 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
                 self.onDeselectEdge(properties);
                 });
             
+            graph.on('showPopup',function(properties){
+                self.onShowPopup(properties);
+                });
+            
+            graph.on('hidePopup',function(properties){
+                self.onHidePopup(properties);
+                });
+            
+            graph.on('initRedraw',function(properties){
+                self.onInitRedraw(properties);
+                });
+            
+            graph.on('beforeDrawing',function(properties){
+                self.onBeforeDrawing(properties);
+                });
+            
+            graph.on('afterDrawing',function(properties){
+                self.onAfterDrawing(properties);
+                });
+            
+            
       
             graph.draw();
     };
@@ -194,6 +215,25 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
     	graph.fit();
     }
     
+    this.getSelection = function (){
+    	self.onGetSelection(graph.getSelection());
+    }
+    
+    this.storePositions = function (){
+    	graph.storePositions();
+    }
+    this.moveNode = function (n,x,y){
+    	graph.moveNode(n,x,y);
+    }
+    this.stabalize = function (i){
+    	graph.stabalize(i);
+    }
+    this.unselectAll = function (){
+    	graph.unselectAll();
+    }
+    this.releaseNode = function (){
+    	graph.releaseNode();
+    }
     
     
 };

@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by roshans on 11/30/14.
+ * Added previousSelection and pointer by Martin Prause 9.8.2017
  */
 public class ClickEvent extends Event {
     public ClickEvent(JsonArray properties) throws JsonException {

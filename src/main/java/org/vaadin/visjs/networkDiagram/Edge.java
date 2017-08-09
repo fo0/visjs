@@ -1,13 +1,12 @@
 package org.vaadin.visjs.networkDiagram;
 
-import org.vaadin.visjs.networkDiagram.listener.EdgeListener;
-import org.vaadin.visjs.networkDiagram.listener.NodeListener;
 import org.vaadin.visjs.networkDiagram.options.edges.Edges;
 import org.vaadin.visjs.networkDiagram.util.Color;
 
 
 /**
  * Created by roshans on 10/10/14.
+ * Removed edgeListener - now in network object, extends Edges, Martin Prause 9.8.2017
  */
 public class Edge extends Edges {
 

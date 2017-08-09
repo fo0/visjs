@@ -7,6 +7,7 @@ import elemental.json.JsonObject;
 
 /**
  * Created by roshans on 11/30/14.
+ * Renamed by Martin Prause 9.8.2017
  */
 public class HoverBlurEvent extends NetworkEvent {
     public HoverBlurEvent(JsonArray properties) throws JsonException {

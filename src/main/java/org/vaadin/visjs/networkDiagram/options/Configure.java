@@ -7,10 +7,11 @@ public class Configure {
 
 	 private boolean enabled= false;
 	 private boolean showButton= false;
-	 //TODO
-	 //filter: 'nodes,edges',
-	 //container: undefined,
-	public boolean isEnabled() {
+	 private String filter;
+	 private String container;
+	
+
+	 public boolean isEnabled() {
 		return enabled;
 	}
 	public void setEnabled(boolean enabled) {
@@ -22,5 +23,18 @@ public class Configure {
 	public void setShowButton(boolean showButton) {
 		this.showButton = showButton;
 	}
+	public String getFilter() {
+		return filter;
+	}
+	public void setFilter(String filter) {
+		this.filter = filter;
+	}
+	public String getContainer() {
+		return container;
+	}
+	public void setContainer(String container) {
+		this.container = container;
+	}
 	 
+	
 }
