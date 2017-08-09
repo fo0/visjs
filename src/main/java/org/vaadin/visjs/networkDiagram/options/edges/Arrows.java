@@ -8,10 +8,28 @@ import com.google.gson.annotations.SerializedName;
 
 public class Arrows {
 	
-	ArrowHead to;
-	ArrowHead middle;
-	ArrowHead from;
+	private ArrowHead to;
+	private ArrowHead middle;
+	private ArrowHead from;
 
+	public Arrows(){
+		
+	}
+	
+	public Arrows(ArrowHead to){
+		this.to=to;
+	}
+	
+	public Arrows(ArrowHead to,ArrowHead middle){
+		this.to=to;
+		this.middle=middle;
+	}
+	
+	public Arrows(ArrowHead to,ArrowHead middle,ArrowHead from){
+		this.to=to;
+		this.middle=middle;
+		this.from=from;
+	}
 	
 	public ArrowHead getTo() {
 		return to;

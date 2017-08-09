@@ -6,7 +6,6 @@ import org.vaadin.visjs.networkDiagram.util.Scaling;
 import org.vaadin.visjs.networkDiagram.util.Shadow;
 import org.vaadin.visjs.networkDiagram.util.Shape;
 import org.vaadin.visjs.networkDiagram.util.ShapeProperties;
-import org.vaadin.visjs.networkDiagram.Node;
 import org.vaadin.visjs.networkDiagram.options.nodes.Icon;
 
 /**
@@ -17,8 +16,7 @@ public class Nodes {
 
 	private int borderWidth = 1;
     private int borderWidthSelected;
-    //brokenImage:undefined
-    //chosen: true,
+    private boolean chosen=true;
     private Color color;
     //fixed
     private Font font;
@@ -30,7 +28,7 @@ public class Nodes {
     private String brokenImage;
     
     private boolean labelHighlightBold= true;
-    //level: undefined,
+    private Integer level;
     private int mass=1;
     private boolean physics=true;
     private Scaling scaling;
@@ -41,9 +39,28 @@ public class Nodes {
     private int size=25;
     private String title=null;
     private String value=null;
-    private boolean widthConstraint=false;
+    private WidthConstraint widthConstraint;
     private Integer x=null;
     private Integer y=null;
+    
+    
+    
+    
+	public boolean isChosen() {
+		return chosen;
+	}
+	public void setChosen(boolean chosen) {
+		this.chosen = chosen;
+	}
+	public WidthConstraint getWidthConstraint() {
+		return widthConstraint;
+	}
+	public Integer getLevel() {
+		return level;
+	}
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
 	public int getBorderWidth() {
 		return borderWidth;
 	}
@@ -158,10 +175,10 @@ public class Nodes {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	public boolean isWidthConstraint() {
+	public WidthConstraint isWidthConstraint() {
 		return widthConstraint;
 	}
-	public void setWidthConstraint(boolean widthConstraint) {
+	public void setWidthConstraint(WidthConstraint widthConstraint) {
 		this.widthConstraint = widthConstraint;
 	}
 	public Integer getX() {

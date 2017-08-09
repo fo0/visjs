@@ -28,14 +28,22 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
         options.manipulation.addEdge=function(edgeData,callback) { if (customEdgeifAdded==true) {edgeData.label=customEdgeLabel;edgeData.id=customEdgeID;} self.onManipulationEdgeAdded(edgeData);callback(edgeData); };
         options.manipulation.deleteNode=function(nodeData,callback) { self.onManipulationNodeDeleted(nodeData);callback(nodeData); };
         options.manipulation.deleteEdge=function(edgeData,callback) { self.onManipulationEdgeDeleted(edgeData);callback(edgeData); };
+        options.manipulation.editEdge=function(edgeData,callback) {  self.onManipulationEdgeEdited(edgeData);callback(edgeData); };
+
 
         nodes = new vis.DataSet();
         edges = new vis.DataSet();
         container = this.getElement();
         graph = new vis.Network(container,{ nodes: nodes, edges: edges } , options);
 
-            graph.on('select',function(properties){
-                self.onSelect(properties);
+        	graph.on('select',function(properties){
+        		self.onSelect(properties);
+            });
+            graph.on('selectNode',function(properties){
+                self.onSelectNode(properties);
+                });
+            graph.on('selectEdge',function(properties){
+                self.onSelectEdge(properties);
                 });
             graph.on('click',function(properties){
                 self.onClick(properties);
@@ -49,6 +57,12 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
              graph.on("blurNode",function(properties){
                     self.onBlurNode(properties);
                 });
+             graph.on('hoverEdge',function(properties){
+                 self.onHoverEdge(properties);
+             });
+	         graph.on("blurEdge",function(properties){
+	               self.onBlurEdge(properties);
+	           });
              graph.on('resize',function(properties){
                     self.onResize(properties);
                 });
@@ -58,20 +72,37 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
              graph.on('dragEnd',function(properties){
                     self.onDragEnd(properties);
                 });
+             graph.on('dragging',function(properties){
+                 self.onDragging(properties);
+             });
              graph.on('startStabilization',function(properties){
                     self.onStartStabilization(properties);
                 });
              graph.on('stabilized',function(properties){
                      self.onStabilized(properties);
                 });
-             graph.on('viewChanged',function(properties){
-                self.onViewChanged(properties);
-                });
-
+            
             graph.on('zoom',function(properties){
                 self.onZoom(properties);
                 });
           
+            graph.on('oncontext',function(properties){
+                self.onContext(properties);
+                });
+            graph.on('hold',function(properties){
+                self.onHold(properties);
+                });
+            graph.on('release',function(properties){
+                self.onRelease(properties);
+                });
+            graph.on('deselectNode',function(properties){
+                self.onDeselectNode(properties);
+                });
+            graph.on('deselectEdge',function(properties){
+                self.onDeselectEdge(properties);
+                });
+            
+      
             graph.draw();
     };
     
@@ -132,4 +163,37 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
     this.destroyNetwork = function(){
         graph.destroyNetwork();
     };
+    
+    this.focusNode = function (id) {
+    	graph.focus(id);
+
+    };
+    
+    
+    this.addNodeMode = function (){
+    	graph.addNodeMode();
+    }
+    this.addEdgeMode = function (){
+    	graph.addEdgeMode();
+    }
+    
+    this.enableEditMode = function (){
+    	graph.enableEditMode();
+    }
+    
+    this.disableEditMode = function (){
+    	graph.disableEditMode();
+    }
+    this.editEdgeMode = function (){
+    	graph.editEdgeMode();
+    }
+    this.deleteSelected = function (){
+    	graph.deleteSelected();
+    }
+    this.fit = function (){
+    	graph.fit();
+    }
+    
+    
+    
 };

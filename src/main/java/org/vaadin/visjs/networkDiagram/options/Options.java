@@ -33,20 +33,13 @@ public class Options {
     	manipulation=new Manipulation();
     	interaction=new Interaction();
     	locales.put("en", new Locale());
-    	Arrows ar=new Arrows();
-    	ArrowHead arh=new ArrowHead();
-    	arh.setEnabled(true);
-    	ar.setTo(arh);
-    	edges=new Edges();
+    	Arrows ar=new Arrows(new ArrowHead());
+     	edges=new Edges();
     	edges.setArrows(ar);
-    	
     	nodes=new Nodes();
-    	nodes.setIcon(new Icon());
-    	nodes.setShape(Shape.icon);
+
     }
     
-    //private int stabilizationIterations = 1000;
-
     private Physics physics;
     private Edges edges;
     private Nodes nodes;

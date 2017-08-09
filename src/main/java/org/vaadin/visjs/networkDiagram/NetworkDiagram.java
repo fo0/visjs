@@ -1,8 +1,15 @@
 package org.vaadin.visjs.networkDiagram;
 
+import org.vaadin.visjs.networkDiagram.event.AddEdgeEvent;
+import org.vaadin.visjs.networkDiagram.event.AddNodeEvent;
+import org.vaadin.visjs.networkDiagram.event.ClickEvent;
+import org.vaadin.visjs.networkDiagram.event.DeleteNodesEdgesEvent;
+import org.vaadin.visjs.networkDiagram.event.HoverBlurEvent;
 import org.vaadin.visjs.networkDiagram.event.NetworkEvent;
-import org.vaadin.visjs.networkDiagram.event.node.*;
 import org.vaadin.visjs.networkDiagram.listener.GraphListener;
+import org.vaadin.visjs.networkDiagram.listener.GraphSelectListener;
+import org.vaadin.visjs.networkDiagram.listener.ManipulationListener;
+
 import org.vaadin.visjs.networkDiagram.options.Options;
 import org.vaadin.visjs.networkDiagram.util.Constants;
 import com.google.gson.Gson;
@@ -15,7 +22,7 @@ import elemental.json.JsonException;
 import elemental.json.JsonObject;
 import elemental.json.JsonType;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 
@@ -27,111 +34,198 @@ import java.util.List;
 @JavaScript({"vis.min.js", "networkDiagram-connector.js"})
 @StyleSheet({"vis.min.css", "networkDiagram.css"})
 public class NetworkDiagram extends AbstractJavaScriptComponent {
-    private List<Node.NodeSelectListener> nodeSelectListeners = new ArrayList<>();
-    private List<Node.NodeClickListener> nodeClickListeners = new ArrayList<>();
-    private List<Node.NodeDoubleClickListener> nodeDoubleClickListeners = new ArrayList<>();
-    private List<Node.NodeHoverListener> nodeHoverListeners = new ArrayList<>();
-    private List<Node.NodeBlurListener> nodeBlurListeners = new ArrayList<>();
-    private List<Node.NodeDragStartListener> nodeDragStartListeners = new ArrayList<>();
-    private List<Node.NodeDragEndListener> nodeDragEndListeners = new ArrayList<>();
+    
+	private SelectListener nodeSelectListeners;
+	private SelectListener edgeSelectListeners;
+	private SelectListener selectListener;
+	private ClickListener clickListener;
+	private DoubleClickListener doubleClickListener;
+	private OnContextListener onContextListener;
+	private HoldListener holdListener;
+	private ReleaseListener releaseListener;
+	private DeselectNodeListener deselectNodeListener;
+	private DeselectEdgeListener deselectEdgeListener;
+	private HoverNodeListener hoverNodeListener;
+	private BlurNodeListener blurNodeListener;
+	private HoverEdgeListener hoverEdgeListener;
+	private BlurEdgeListener blurEdgeListener;
+	private DragStartListener dragStartListener;
+	private DragEndListener dragEndListener;
+	private DraggingListener draggingListener;
     private ResizeListener resizeListener;
     private StabilizationStartListener stabilizationStartListener;
     private StabilizedListener stabilizedListener;
-    private ViewChangedListener viewChangedListener;
     private ZoomListener zoomListener;
+    private ManipulationListener manipulationListener;
+    
     private Gson gson = new Gson();
 
+    
     public NetworkDiagram(Options options) {
         super();
         addFunction(Constants.ON_SELECT, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
-                SelectEvent event = EventGenerator.getNodeSelectEvent(properties);
+               ClickEvent event = EventGenerator.getClickEvent(properties);
+               fireSelectEvent(event);
+            }
+        });
+        addFunction(Constants.ON_SELECT_NODE, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	ClickEvent event = EventGenerator.getClickEvent(properties);
                 fireNodeSelectEvent(event);
             }
         });
+        
+        addFunction(Constants.ON_SELECT_EDGE, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	ClickEvent event = EventGenerator.getClickEvent(properties);
+                fireEdgeSelectEvent(event);
+            }
+        });
+        
         addFunction(Constants.ON_CLICK, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
-                ClickEvent event = EventGenerator.getNodeClickEvent(properties);
-                fireNodeClickEvent(event);
+                ClickEvent event = EventGenerator.getClickEvent(properties);
+                fireClickEvent(event);
             }
         });
         addFunction(Constants.ON_DOUBLE_CLICK, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
-                DoubleClickEvent event = EventGenerator.getNodeDoubleClickEvent(properties);
-                fireNodeDoubleClickEvent(event);
+            	ClickEvent event = EventGenerator.getClickEvent(properties);
+                fireDoubleClickEvent(event);
             }
         });
         addFunction(Constants.ON_HOVER_NODE, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
-                HoverEvent event = EventGenerator.getNodeHoverEvent(properties);
-                fireNodeHoverEvent(event);
+                HoverBlurEvent event = EventGenerator.getHoverBlurEvent(properties);
+                fireHoverNodeEvent(event);
             }
         });
         addFunction(Constants.ON_BLUR_NODE, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
-                BlurEvent event = EventGenerator.getNodeBlurEvent(properties);
-                fireNodeBlurEvent(event);
+            	HoverBlurEvent event = EventGenerator.getHoverBlurEvent(properties);
+            	fireBlurNodeEvent(event);
             }
         });
+        addFunction(Constants.ON_HOVER_EDGE, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+                HoverBlurEvent event = EventGenerator.getHoverBlurEvent(properties);
+                fireHoverEdgeEvent(event);
+            }
+        });
+        addFunction(Constants.ON_BLUR_EDGE, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	HoverBlurEvent event = EventGenerator.getHoverBlurEvent(properties);
+            	fireBlurEdgeEvent(event);
+            }
+        });
+        
+        addFunction(Constants.ON_CONTEXT, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	ClickEvent event = EventGenerator.getClickEvent(properties);
+            	fireOnContextEvent(event);
+            }
+        });
+        
+        addFunction(Constants.ON_HOLD, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	ClickEvent event = EventGenerator.getClickEvent(properties);
+            	fireHoldEvent(event);
+            }
+        });
+        
+        addFunction(Constants.ON_RELEASE, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	ClickEvent event = EventGenerator.getClickEvent(properties);
+            	fireReleaseEvent(event);
+            }
+        });
+        
+        addFunction(Constants.ON_DESELECT_NODE, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	ClickEvent event = EventGenerator.getClickEvent(properties);
+            	fireDeselectNodeEvent(event);
+            }
+        });
+        
+        addFunction(Constants.ON_DESELECT_EDGE, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	ClickEvent event = EventGenerator.getClickEvent(properties);
+            	fireDeselectEdgeEvent(event);
+            }
+        });
+        
         addFunction(Constants.ON_DRAG_START, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
-                DragStartEvent event = EventGenerator.getNodeDragStartEvent(properties);
-                fireNodeDragStartEvent(event);
+                ClickEvent event = EventGenerator.getClickEvent(properties);
+                fireDragStartEvent(event);
             }
         });
         addFunction(Constants.ON_DRAG_END, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
-                DragEndEvent event = EventGenerator.getNodeDragEndEvent(properties);
-                fireNodeDragEndEvent(event);
+            	ClickEvent event = EventGenerator.getClickEvent(properties);
+            	fireDragEndEvent(event);
             }
         });
+        
+        addFunction(Constants.ON_DRAGGING, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	ClickEvent event = EventGenerator.getClickEvent(properties);
+            	fireDraggingEvent(event);
+            }
+        });
+        
         addFunction(Constants.ON_START_STABILIZATION, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
                 //System.out.println("onStartStabilization" + properties);
-                //fireGraphStabilizationStartEvent();
+                fireGraphStabilizationStartEvent(new NetworkEvent());
             }
         });
         addFunction(Constants.ON_STABILIZED, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
                 //System.out.println("onStabilized" + properties);
-                //fireGraphStabilizedEvent();
+                fireGraphStabilizedEvent(new NetworkEvent());
             }
         });
-        addFunction(Constants.ON_VIEW_CHANGED, new JavaScriptFunction() {
-            @Override
-            public void call(final JsonArray properties) throws JsonException {
-                //System.out.println("onViewChanged" + properties);
-                //fireGraphViewChangedEvent();
-            }
-        });
+      
         addFunction(Constants.ON_ZOOM, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
-                //System.out.println("onZoom" + properties);
-                //fireGraphZoomEvent();
+               fireGraphZoomEvent(new NetworkEvent());
             }
         });
         addFunction(Constants.ON_RESIZE, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
-                //System.out.println("onResize" + properties);
-                //fireGraphResizeEvent();
+               fireGraphResizeEvent(new NetworkEvent());
             }
         });
         addFunction(Constants.ON_MANIPULATION_NODEADDED, new JavaScriptFunction() {
             @Override
             public void call(final JsonArray properties) throws JsonException {
             	if (properties.length()>0) {
-            		debugPrintJsonProperties(Constants.ON_MANIPULATION_NODEADDED,properties.getObject(0));
+            		AddNodeEvent event = EventGenerator.getAddNodeEventEvent(properties);
+            		fireAddNodeEvent(event);
+            		//debugPrintJsonProperties(Constants.ON_MANIPULATION_NODEADDED,properties.getObject(0));
             	}
             }
         });
@@ -139,7 +233,10 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
             @Override
             public void call(final JsonArray properties) throws JsonException {
             	if (properties.length()>0) {
-            		debugPrintJsonProperties(Constants.ON_MANIPULATION_EDGEADDED,properties.getObject(0));
+            		AddEdgeEvent event = EventGenerator.getAddEdgeEventEvent(properties);
+            		fireAddEdgeEvent(event);
+                	
+            		//debugPrintJsonProperties(Constants.ON_MANIPULATION_EDGEADDED,properties.getObject(0));
             	}
             }
         });
@@ -147,8 +244,9 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
             @Override
             public void call(final JsonArray properties) throws JsonException {
             	if (properties.length()>0) {
-            		System.out.println(properties.length());
-            		debugPrintJsonProperties(Constants.ON_MANIPULATION_NODEDELETED,properties.getObject(0));
+            		DeleteNodesEdgesEvent event = EventGenerator.getDeleteNodesEdgesEvent(properties);
+            		fireDeleteEvent(event);
+            		//debugPrintJsonProperties(Constants.ON_MANIPULATION_NODEDELETED,properties.getObject(0));
             	}
             }
         });
@@ -156,14 +254,26 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
             @Override
             public void call(final JsonArray properties) throws JsonException {
             	if (properties.length()>0) {
-            		debugPrintJsonProperties(Constants.ON_MANIPULATION_EDGEDELETED,properties.getObject(0));
+            		DeleteNodesEdgesEvent event = EventGenerator.getDeleteNodesEdgesEvent(properties);
+            		fireDeleteEvent(event);
+            		//debugPrintJsonProperties(Constants.ON_MANIPULATION_EDGEDELETED,properties.getObject(0));
             	}
             }
         });
         
-        setCustomEdgeIfAdded(true,"sdf","fgh");
+        addFunction(Constants.ON_MANIPULATION_EDGEEDITED, new JavaScriptFunction() {
+            @Override
+            public void call(final JsonArray properties) throws JsonException {
+            	if (properties.length()>0) {
+            		AddEdgeEvent event = EventGenerator.getAddEdgeEventEvent(properties);
+            		fireEditEdgeEvent(event);
+            		debugPrintJsonProperties(Constants.ON_MANIPULATION_EDGEEDITED,properties.getObject(0));
+            	}
+            }
+        });
         
-        System.out.println(gson.toJson(options));
+         
+        //System.out.println(gson.toJson(options));
         
         callFunction("init", gson.toJson(options));
         
@@ -226,11 +336,13 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
 
     public void addEdges(List<Edge> edges) {
         getState().updates++;
+        
         callFunction("addEdges", gson.toJson(edges));
     }
 
     public void addEdge(Edge... edges) {
         getState().updates++;
+        System.out.println(gson.toJson(edges));
         callFunction("addEdges", gson.toJson(edges));
     }
 
@@ -273,7 +385,36 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
     public void destroyNetwork() {
         callFunction("destroyNetwork");
     }
-
+    
+    public void focusNode(String id){
+    	callFunction("focusNode",id);
+    }
+    
+    public void addNodeMode(){
+    	callFunction("addNodeMode");
+    }
+    public void addEdgeMode(){
+    	callFunction("addEdgeMode");
+    }
+    public void enableEditMode(){
+    	callFunction("enableEditMode");
+    }
+    public void disableEditMode(){
+    	callFunction("disableEditMode");
+    }
+    public void editEdgeMode(){
+    	callFunction("editEdgeMode");
+    }
+    public void deleteSelected(){
+    	callFunction("deleteSelected");
+    }
+    public void fit(){
+    	callFunction("fit");
+    }
+    
+    
+    
+    
     public void clear() {
         clearEdges();
         clearNodes();
@@ -282,65 +423,159 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
     public void drawConnections() {
         callFunction("drawConnections");
     }
-
-    public void addNodeSelectListener(Node.NodeSelectListener listener) {
-        nodeSelectListeners.add(listener);
-    }
-
-    public void removeNodeSelectListener(Node.NodeSelectListener listener) {
-        nodeSelectListeners.remove(listener);
-    }
-
-    public void removeNodeClickListeners(Node.NodeClickListener listener) {
-        nodeClickListeners.remove(listener);
-    }
-
-    public void addNodeClickListener(Node.NodeClickListener nodeClickListener) {
-        this.nodeClickListeners.add(nodeClickListener);
-    }
-
-    public void removeNodeDoubleClickListener(Node.NodeDoubleClickListener listener) {
-        nodeDoubleClickListeners.remove(listener);
-    }
-
-    public void addNodeDoubleClickListener(Node.NodeDoubleClickListener listener) {
-        nodeDoubleClickListeners.add(listener);
-    }
-
-    public void removeNodeHoverListener(Node.NodeHoverListener listener) {
-        nodeHoverListeners.remove(listener);
-    }
-
-    public void addNodeHoverListener(Node.NodeHoverListener listener) {
-        this.nodeHoverListeners.add(listener);
-    }
-
-    public void removeNodeBlurListener(Node.NodeBlurListener listener) {
-        nodeBlurListeners.remove(listener);
-    }
-
-    public void addNodeBlurListener(Node.NodeBlurListener listener) {
-        this.nodeBlurListeners.add(listener);
-    }
-
-    public void removeNodeDragStartListener(Node.NodeDragStartListener listener) {
-        nodeDragStartListeners.remove(listener);
-    }
-
-    public void addNodeDragStartListener(Node.NodeDragStartListener listener) {
-        this.nodeDragStartListeners.add(listener);
-    }
-
-    public void removeNodeDragEndListener(Node.NodeDragEndListener listener) {
-        nodeDragEndListeners.remove(listener);
-    }
-
-    public void addNodeDragEndListener(Node.NodeDragEndListener listener) {
-        this.nodeDragEndListeners.add(listener);
-    }
+    
+   
+    
 
     //adding and removing graph listeners
-
+   
+    
+    
+    
+    
+    public void addSelectListener(SelectListener listener) {
+        this.selectListener = listener;
+    }
+    
+    public void removeSelectListener() {
+        this.selectListener = null;
+    }
+    
+    public void addNodeSelectListener(SelectListener listener) {
+        this.nodeSelectListeners = listener;
+    }
+    
+    public void removeNodeSelectListener() {
+        this.nodeSelectListeners = null;
+    }
+    
+    public void addEdgeSelectListener(SelectListener listener) {
+        this.edgeSelectListeners = listener;
+    }
+    
+    public void removeEdgeSelectListener() {
+        this.edgeSelectListeners = null;
+    }
+     
+    public void addClickListener(ClickListener listener) {
+        this.clickListener = listener;
+    }
+    
+    public void removeClickListener() {
+        this.clickListener = null;
+    }
+    
+    public void addDoubleClickListener(DoubleClickListener listener) {
+        this.doubleClickListener = listener;
+    }
+    
+    public void removeDoubleClickListener() {
+        this.doubleClickListener = null;
+    }
+    
+    public void addOnContextListener(OnContextListener listener) {
+        this.onContextListener = listener;
+    }
+    
+    public void removeOnContextListener() {
+        this.onContextListener = null;
+    }
+    
+    public void addHoldListener(HoldListener listener) {
+        this.holdListener = listener;
+    }
+    
+    public void removeHoldListener() {
+        this.holdListener = null;
+    }
+    
+    public void addReleaseListener(ReleaseListener listener) {
+        this.releaseListener = listener;
+    }
+    
+    public void removeReleaseListener() {
+        this.releaseListener = null;
+    }
+    
+    public void addDeselectNodeListener(DeselectNodeListener listener) {
+        this.deselectNodeListener = listener;
+    }
+    
+    public void removeDeselectNodeListener() {
+        this.deselectNodeListener = null;
+    }
+    
+    public void addDeselectEdgeListener(DeselectEdgeListener listener) {
+        this.deselectEdgeListener = listener;
+    }
+    
+    public void removeDeselectEdgeListener() {
+        this.deselectEdgeListener = null;
+    }
+    public void addHoverNodeListener(HoverNodeListener listener) {
+        this.hoverNodeListener = listener;
+    }
+    
+    public void removeHoverNodeListener() {
+        this.hoverNodeListener = null;
+    }
+    
+    public void addBlurNodeListener(BlurNodeListener listener) {
+        this.blurNodeListener = listener;
+    }
+    
+    public void removeBlurNodeListener() {
+        this.blurNodeListener = null;
+    }
+    
+    public void addHoverEdgeListener(HoverEdgeListener listener) {
+        this.hoverEdgeListener = listener;
+    }
+    
+    public void removeHoverEdgeListener() {
+        this.hoverEdgeListener = null;
+    }
+    
+    public void addBlurEdgeListener(BlurEdgeListener listener) {
+        this.blurEdgeListener = listener;
+    }
+    
+    public void removeBlurEdgeListener() {
+        this.blurEdgeListener = null;
+    }
+    
+    public void addDragStartListener(DragStartListener listener) {
+        this.dragStartListener = listener;
+    }
+    
+    public void removeDragStartListener() {
+        this.dragStartListener = null;
+    }
+    
+    public void addDragEndListener(DragEndListener listener) {
+        this.dragEndListener = listener;
+    }
+    
+    public void removeDragEndListener() {
+        this.dragEndListener = null;
+    }
+    
+    public void addDraggingListener(DraggingListener listener) {
+        this.draggingListener = listener;
+    }
+    
+    public void removeDraggingEndListener() {
+        this.draggingListener = null;
+    }
+    
+    public void addManipulationListenerListener(ManipulationListener listener) {
+        this.manipulationListener = listener;
+    }
+    
+    public void removeManipulationListener() {
+        this.manipulationListener = null;
+    }
+    
     public void addResizeListener(ResizeListener resizeListener) {
         this.resizeListener = resizeListener;
     }
@@ -353,10 +588,7 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.stabilizedListener = stabilizedListener;
     }
 
-    public void addViewChangedListener(ViewChangedListener viewChangedListener) {
-        this.viewChangedListener = viewChangedListener;
-    }
-
+  
     public void addZoomListener(ZoomListener zoomListener) {
         this.zoomListener = zoomListener;
     }
@@ -373,13 +605,13 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         this.stabilizedListener = null;
     }
 
-    public void removeViewChangedListener() {
-        this.viewChangedListener = null;
-    }
-
     public void removeZoomListener() {
         this.zoomListener = null;
     }
+    
+
+
+    
 
     //listeners for entire graph
 
@@ -392,10 +624,59 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
     public static abstract class StabilizedListener extends GraphListener {
     }
 
-    public static abstract class ViewChangedListener extends GraphListener {
-    }
-
     public static abstract class ZoomListener extends GraphListener {
+    }
+    
+    public static abstract class SelectListener extends GraphSelectListener {
+    }
+    
+    public static abstract class ClickListener extends GraphSelectListener {
+    }
+    
+    public static abstract class DoubleClickListener extends GraphSelectListener {
+    }
+    
+    public static abstract class OnContextListener extends GraphSelectListener {
+    }
+    
+    public static abstract class HoldListener extends GraphSelectListener {
+    }
+    
+    public static abstract class ReleaseListener extends GraphSelectListener {
+    }
+    
+    public static abstract class DeselectNodeListener extends GraphSelectListener {
+    }
+    
+    public static abstract class DeselectEdgeListener extends GraphSelectListener {
+    }
+    
+    public static abstract class HoverNodeListener extends GraphListener {
+    }
+    
+    public static abstract class BlurNodeListener extends GraphListener {
+    }
+    
+    public static abstract class HoverEdgeListener extends GraphListener {
+    }
+    
+    public static abstract class BlurEdgeListener extends GraphListener {
+    }
+    
+    public static abstract class DragStartListener extends GraphSelectListener {
+    } 
+    
+    public static abstract class DragEndListener extends GraphSelectListener {
+    } 
+    
+    public static abstract class DraggingListener extends GraphSelectListener {
+    } 
+    
+  
+    public void fireSelectEvent(ClickEvent event) {
+        if (selectListener != null) {
+        	selectListener.onFired(event);
+        }
     }
 
     public void fireGraphResizeEvent(NetworkEvent event) {
@@ -416,86 +697,133 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
         }
     }
 
-    public void fireGraphViewChangedEvent(NetworkEvent event) {
-        if (viewChangedListener != null) {
-            viewChangedListener.onFired(event);
-        }
-    }
-
     public void fireGraphZoomEvent(NetworkEvent event) {
         if (zoomListener != null) {
             zoomListener.onFired(event);
         }
     }
-
-    public void fireNodeSelectEvent(SelectEvent event) {
-        for (String nodeID : event.getNodeIds()) {
-            for (Node.NodeSelectListener listener : nodeSelectListeners) {
-                if (listener.getNode().getId().equals(nodeID)) {
-                    listener.onFired(event);
-                }
-            }
+    
+    
+    public void fireEdgeSelectEvent(ClickEvent event) {
+        if (edgeSelectListeners != null) {
+        	edgeSelectListeners.onFired(event);
         }
     }
-
-    public void fireNodeClickEvent(ClickEvent event) {
-        for (String nodeID : event.getNodeIds()) {
-            for (Node.NodeClickListener listener : nodeClickListeners) {
-                if (listener.getNode().getId().equals(nodeID)) {
-                    listener.onFired(event);
-                }
-            }
+    
+    public void fireNodeSelectEvent(ClickEvent event) {
+        if (nodeSelectListeners != null) {
+        	nodeSelectListeners.onFired(event);
         }
     }
-
-    public void fireNodeDoubleClickEvent(DoubleClickEvent event) {
-        for (String nodeID : event.getNodeIds()) {
-            for (Node.NodeDoubleClickListener listener : nodeDoubleClickListeners) {
-                if (listener.getNode().getId().equals(nodeID)) {
-                    listener.onFired(event);
-                }
-            }
+    
+    public void fireClickEvent(ClickEvent event) {
+        if (clickListener != null) {
+        	clickListener.onFired(event);
         }
     }
-
-    public void fireNodeHoverEvent(HoverEvent event) {
-        for (String nodeID : event.getNodeIds()) {
-            for (Node.NodeHoverListener listener : nodeHoverListeners) {
-                if (listener.getNode().getId().equals(nodeID)) {
-                    listener.onFired(event);
-                }
-            }
+   
+    public void fireDoubleClickEvent(ClickEvent event) {
+    	  if (doubleClickListener != null) {
+    		  doubleClickListener.onFired(event);
+          }
+    }
+    
+    public void fireOnContextEvent(ClickEvent event) {
+  	  if (onContextListener != null) {
+  		onContextListener.onFired(event);
         }
-
+  }
+    
+    public void fireHoldEvent(ClickEvent event) {
+    	  if (holdListener != null) {
+    		holdListener.onFired(event);
+          }
     }
 
-    public void fireNodeBlurEvent(BlurEvent event) {
-        for (String nodeID : event.getNodeIds()) {
-            for (Node.NodeBlurListener listener : nodeBlurListeners) {
-                if (listener.getNode().getId().equals(nodeID)) {
-                    listener.onFired(event);
-                }
-            }
+    public void fireReleaseEvent(ClickEvent event) {
+  	  if (releaseListener != null) {
+  		releaseListener.onFired(event);
         }
     }
-
-    public void fireNodeDragStartEvent(DragStartEvent event) {
-        for (String nodeID : event.getNodeIds()) {
-            for (Node.NodeDragStartListener listener : nodeDragStartListeners) {
-                if (listener.getNode().getId().equals(nodeID)) {
-                    listener.onFired(event);
-                }
-            }
+    
+    public void fireDeselectNodeEvent(ClickEvent event) {
+    	  if (deselectNodeListener != null) {
+    		  deselectNodeListener.onFired(event);
+          }
+      }
+    
+    public void fireDeselectEdgeEvent(ClickEvent event) {
+  	  if (deselectEdgeListener != null) {
+  		deselectEdgeListener.onFired(event);
         }
     }
-
-    public void fireNodeDragEndEvent(DragEndEvent event) {
-        for (String nodeID : event.getNodeIds()) {
-            for (Node.NodeDragEndListener listener : nodeDragEndListeners) {
-                if (listener.getNode().getId().equals(nodeID)) {
-                    listener.onFired(event);
-                }
-            }
+    
+    public void fireHoverNodeEvent(HoverBlurEvent event) {
+    	  if (hoverNodeListener != null) {
+    		  hoverNodeListener.onFired(event);
+          }
+      }
+    
+    public void fireBlurNodeEvent(HoverBlurEvent event) {
+  	  if (blurNodeListener != null) {
+  		  blurNodeListener.onFired(event);
         }
     }
+    
+    public void fireHoverEdgeEvent(HoverBlurEvent event) {
+  	  if (hoverEdgeListener != null) {
+  		  hoverEdgeListener.onFired(event);
+        }
+    }
+  
+  public void fireBlurEdgeEvent(HoverBlurEvent event) {
+	  if (blurEdgeListener != null) {
+		  blurEdgeListener.onFired(event);
+      }
+  }
+  
+  public void fireDragStartEvent(ClickEvent event) {
+	  if (dragStartListener != null) {
+		  dragStartListener.onFired(event);
+      }
+  }
+  
+  public void fireDragEndEvent(ClickEvent event) {
+	  if (dragEndListener != null) {
+		  dragEndListener.onFired(event);
+      }
+  }
+  
+  public void fireDraggingEvent(ClickEvent event) {
+	  if (draggingListener != null) {
+		  draggingListener.onFired(event);
+      }
+  }
+  
+  public void fireAddNodeEvent(AddNodeEvent event) {
+	  if (manipulationListener != null) {
+		  manipulationListener.onFiredNodeAdded(event);
+      }
+  }
+  
+  public void fireAddEdgeEvent(AddEdgeEvent event) {
+	  if (manipulationListener != null) {
+		  manipulationListener.onFiredEdgeAdded(event);
+      }
+  }
+  
+  public void fireEditEdgeEvent(AddEdgeEvent event) {
+	  if (manipulationListener != null) {
+		  manipulationListener.onFiredEdgeEdited(event);
+      }
+  }
+  
+  public void fireDeleteEvent(DeleteNodesEdgesEvent event) {
+	  if (manipulationListener != null) {
+		  manipulationListener.onFiredDelete(event);
+      }
+  }
+   
+   
+        
 }

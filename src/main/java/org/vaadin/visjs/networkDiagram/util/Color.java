@@ -16,8 +16,8 @@ public class Color {
     public Color() {
     }
 
-    public Color(String backgroundColor) {
-        this.background = backgroundColor;
+    public Color(String color) {
+        this.color = color;
     }
 
     public Color(String backgroundColor, String highlightColor) {

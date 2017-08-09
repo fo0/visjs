@@ -5,27 +5,29 @@ import org.vaadin.visjs.networkDiagram.util.Font;
 import org.vaadin.visjs.networkDiagram.util.Scaling;
 import org.vaadin.visjs.networkDiagram.util.Shadow;
 import org.vaadin.visjs.networkDiagram.Edge;
+import org.vaadin.visjs.networkDiagram.options.nodes.WidthConstraint;
 
 /**
  * Created by roshans on 10/29/14.
  * Updated to news options by Martin Prause 5.8.2017
  */
 public class Edges {
-
+	
+	private Arrows arrows;
     boolean arrowStrikethrough=true;
     boolean chosen=true;
    
     private Color color = new Color("#848484","#848484");
-    //choosen: undefined
-    private Dash dash;
+
+    private int dashes[];
     private Font font;
     
-    private Arrows arrows;
+   
     private boolean hidden=false;
     private double hoverWidth=1.5;
-    //label: undefined,
+    private String label;
     private boolean labelHighlightBold=true;
-    //length: undefined,
+    private Integer length;
     private boolean physics=true;
 
     private Scaling scaling=null;
@@ -33,13 +35,32 @@ public class Edges {
     private int selfReferenceSize=20;
     private Shadow shadow=null;
 
-    private Smooth smooth=null;
-    private String title=null;
-    //value: undefined,
+    private Smooth smooth;;
+    private String title;
+    private Integer value;
     private int width=1;
-    private boolean widthConstraint=false;
+    private WidthConstraint widthConstraint;
+       
     
     
+	public String getLabel() {
+		return label;
+	}
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	public Integer getLength() {
+		return length;
+	}
+	public void setLength(Integer length) {
+		this.length = length;
+	}
+	public Integer getValue() {
+		return value;
+	}
+	public void setValue(Integer value) {
+		this.value = value;
+	}
 	public boolean isArrowStrikethrough() {
 		return arrowStrikethrough;
 	}
@@ -58,11 +79,11 @@ public class Edges {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	public Dash getDash() {
-		return dash;
+	public int[] getDashes() {
+		return dashes;
 	}
-	public void setDash(Dash dash) {
-		this.dash = dash;
+	public void setDashes(int[] dashes) {
+		this.dashes = dashes;
 	}
 	public Font getFont() {
 		return font;
@@ -142,10 +163,10 @@ public class Edges {
 	public void setWidth(int width) {
 		this.width = width;
 	}
-	public boolean isWidthConstraint() {
+	public WidthConstraint isWidthConstraint() {
 		return widthConstraint;
 	}
-	public void setWidthConstraint(boolean widthConstraint) {
+	public void setWidthConstraint(WidthConstraint widthConstraint) {
 		this.widthConstraint = widthConstraint;
 	}
      

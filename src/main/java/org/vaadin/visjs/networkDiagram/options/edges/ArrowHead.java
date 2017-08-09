@@ -7,7 +7,18 @@ package org.vaadin.visjs.networkDiagram.options.edges;
 public class ArrowHead {
 	private boolean enabled=false;
 	private int scaleFactor=1; 
-	private Arrows.Style type=Arrows.Style.arrow;
+	private Arrows.Style style=Arrows.Style.arrow;
+	
+	public ArrowHead(){
+		enabled=true;
+	}
+	
+	public ArrowHead(int scaleFactor,Arrows.Style style){
+		enabled=true;
+		this.scaleFactor=scaleFactor;
+		this.style=style;
+	}
+	
 	
 	public boolean isEnabled() {
 		return enabled;
@@ -21,12 +32,15 @@ public class ArrowHead {
 	public void setScaleFactor(int scaleFactor) {
 		this.scaleFactor = scaleFactor;
 	}
-	public Arrows.Style getType() {
-		return type;
+
+	public Arrows.Style getStyle() {
+		return style;
 	}
-	public void setType(Arrows.Style type) {
-		this.type = type;
+
+	public void setStyle(Arrows.Style style) {
+		this.style = style;
 	}
+
 	
 	
 }

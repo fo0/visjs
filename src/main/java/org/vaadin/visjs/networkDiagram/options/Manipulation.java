@@ -11,6 +11,16 @@ import java.util.List;
  */
 public class Manipulation {
 
-	 boolean enabled= true;
+	 private boolean enabled= false;
 	 //All other fields are callback functions -> refer to NetworkDiagram
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	 
+	 
 }
