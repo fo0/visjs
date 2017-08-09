@@ -1,4 +1,4 @@
-visjs-network
+Visjs (4.x) Network implementation for Vaadin (8.x) - Addon
 =====
 
 
