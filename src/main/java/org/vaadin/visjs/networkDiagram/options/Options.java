@@ -24,22 +24,23 @@ public class Options {
     private String locale = "en";
     private String height = "300px";
     private String width = "300px";
-    private HashMap<String,Locale> locales= new HashMap<String,Locale>();
+    private HashMap<String,Locale> locales;
     private Configure configure;
     private Manipulation manipulation;   
     private Interaction interaction;   
-    private Groups groups;
+    private HashMap<String, Group> groups;
     
     public Options(){
     	configure=new Configure();
     	manipulation=new Manipulation();
     	interaction=new Interaction();
+    	locales=new HashMap<String,Locale>();
     	locales.put("en", new Locale());
-    	groups=new Groups();
-    	Arrows ar=new Arrows(new ArrowHead());
+       	Arrows ar=new Arrows(new ArrowHead());
      	edges=new Edges();
     	edges.setArrows(ar);
     	nodes=new Nodes();
+    	groups=new HashMap<String,Group>();
 
     }
     
@@ -52,14 +53,27 @@ public class Options {
     
     
 
-	public Groups getGroups() {
+	
+
+	public HashMap<String, Group> getGroups() {
 		return groups;
 	}
 
-	public void setGroups(Groups groups) {
+	public void setGroups(HashMap<String, Group> groups) {
 		this.groups = groups;
 	}
 
+	public void addGroup(String name,Group group){
+		this.groups.put(name,group);
+	}
+	
+	public void removeGroup(String name){
+		this.groups.remove(name);
+	}
+	public void clearGroups(){
+		this.groups.clear();
+	}
+	
 	public Interaction getInteraction() {
 		return interaction;
 	}
