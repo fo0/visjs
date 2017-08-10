@@ -225,6 +225,10 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
     this.moveNode = function (n,x,y){
     	graph.moveNode(n,x,y);
     }
+    this.setSize = function (x,y){
+    	graph.setSize(x,y);
+    }
+    
     this.stabalize = function (i){
     	graph.stabalize(i);
     }

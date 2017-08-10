@@ -480,6 +480,10 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
     	callFunction("moveNode",nodeId,x,y);
     }
     
+    public void setSize(String x,String y){
+    	callFunction("setSize",x,y);
+    }
+    
     public void stabalize(int iterations){
     	callFunction("stabalize",iterations);
     }
