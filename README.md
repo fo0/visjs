@@ -21,3 +21,13 @@ Everything in here [vis.js network](http://visjs.org/docs/network/), except
 * Graph methods that return objects (tricky in Vaadin)
 * Loading data from DOT or Gephi
 
+Maven dependencies
+---
+
+```java
+<dependency>
+	<groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.2.4</version>
+</dependency>
+```
