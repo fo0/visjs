@@ -19,7 +19,7 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
     
 
     this.onStateChange = function(){
-        graph.redraw();
+        //graph.redraw();
     }
 
     this.init = function(o){
@@ -124,7 +124,7 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
             
             
       
-            graph.draw();
+            //graph.draw();
     };
     
     this.setCustomNodeIfAdded = function(b,s1,s2) {
