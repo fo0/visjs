@@ -32,7 +32,7 @@ import elemental.json.JsonType;
  * Prause 9.8.2017
  */
 
-@JavaScript({"vis.js", "networkDiagram-connector.js"})
+@JavaScript({"vis-patched.min.js", "networkDiagram-connector.js"})
 @StyleSheet({"vis-network.min.css", "networkDiagram.css"})
 public class NetworkDiagram extends AbstractJavaScriptComponent {
 
