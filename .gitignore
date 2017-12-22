@@ -1,3 +1,6 @@
 /target/
 /.README.md.html
 .settings
+.classpath
+.project
+*.class
