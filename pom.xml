@@ -9,7 +9,7 @@
     <version>2.0.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
-        <vaadin.version>8.1.7</vaadin.version>
+        <vaadin.version>8.2.0</vaadin.version>
         <JDK_VERSION>1.8</JDK_VERSION>
         <Implementation-Version>${project.version}</Implementation-Version>
         <Implementation-Title>${project.name}</Implementation-Title>

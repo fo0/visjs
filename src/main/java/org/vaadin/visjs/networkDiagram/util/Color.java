@@ -7,37 +7,38 @@ public class Color {
 
   private String hover;
   private String highlight = "#D2E5FF";
-  // private String border = "#2B7CE9";
-  // private String background = "#97C2FC";
+  private String border = "#2B7CE9";
+  private String background = "#97C2FC";
   private String color = "#df6b1d";
   private int opacity = 1;
 
   public Color() {}
 
+  /**
+   * @param color
+   */
   public Color(final String color) {
     this.color = color;
   }
 
   public Color(final String backgroundColor, final String highlightColor) {
-    // this.background = backgroundColor;
+    background = backgroundColor;
     highlight = highlightColor;
   }
 
   public Color(final String backgroundColor, final String hoverColor, final String highlightColor) {
-    // this.background = backgroundColor;
+    background = backgroundColor;
     highlight = highlightColor;
     hover = hoverColor;
   }
 
   public Color(final String backgroundColor, final String hoverColor, final String highlightColor,
       final String borderColor) {
-    // this.background = backgroundColor;
+    background = backgroundColor;
     hover = hoverColor;
     highlight = highlightColor;
-    // this.border = borderColor;
+    border = borderColor;
   }
-
-
 
   public int getOpacity() {
     return opacity;
@@ -63,21 +64,21 @@ public class Color {
     this.highlight = highlight;
   }
 
-  // public String getBorderColor() {
-  // return border;
-  // }
-  //
-  // public void setBorderColor(String border) {
-  // this.border = border;
-  // }
-  //
-  // public String getBackgroundColor() {
-  // return background;
-  // }
-  //
-  // public void setBackgroundColor(String background) {
-  // this.background = background;
-  // }
+  public String getBorderColor() {
+    return border;
+  }
+
+  public void setBorderColor(final String border) {
+    this.border = border;
+  }
+
+  public String getBackgroundColor() {
+    return background;
+  }
+
+  public void setBackgroundColor(final String background) {
+    this.background = background;
+  }
 
   public String getColor() {
     return color;
@@ -95,25 +96,23 @@ public class Color {
     this.hover = hover;
   }
 
-  // public String getBorder() {
-  // return border;
-  // }
-  //
-  // public void setBorder(String border) {
-  // this.border = border;
-  // }
-  //
-  // public String getBackground() {
-  // return background;
-  // }
-  //
-  // public void setBackground(String background) {
-  // this.background = background;
-  // }
+  public String getBorder() {
+    return border;
+  }
+
+  public void setBorder(final String border) {
+    this.border = border;
+  }
+
+  public String getBackground() {
+    return background;
+  }
+
+  public void setBackground(final String background) {
+    this.background = background;
+  }
 
   public void setHighlight(final String highlight) {
     this.highlight = highlight;
   }
-
-
 }
