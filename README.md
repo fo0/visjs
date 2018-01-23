@@ -9,7 +9,7 @@ Picture is from example application at https://github.com/watho/visjs-example
 
 ## About this fork
  - Forked from [sameeraroshan](https://github.com/sameeraroshan/visjs) extended by [trobar](https://github.com/trobar/visjs)
- - Implements the **latest vis.js network module (4.21.0)** version for **Vaadin 8.1.7**.
+ - Implements the **latest vis.js network module (4.21.0)** version for **Vaadin 8.2.0**.
  - Integrates a hot fix for a regression until the next release. See https://github.com/almende/vis/commit/f6445cdf07df337ef829d27542823868d2a33873
 
 ## About the addon
