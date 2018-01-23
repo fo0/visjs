@@ -100,12 +100,10 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
                 });
             graph.on('deselectEdge',function(properties){
                 self.onDeselectEdge(properties);
-                });
-            
+                });           
             graph.on('showPopup',function(properties){
                 self.onShowPopup(properties);
-                });
-            
+                });            
             graph.on('hidePopup',function(properties){
                 self.onHidePopup(properties);
                 });
@@ -238,6 +236,4 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
     this.releaseNode = function (){
     	graph.releaseNode();
     }
-    
-    
 };
