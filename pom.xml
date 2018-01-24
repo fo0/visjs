@@ -24,15 +24,11 @@
         </repository>
     </repositories>
 
-    <organization>
-        <name>martinprause</name>
-        <url>https://github.com/trobar/visjs</url>
-    </organization>
 
     <scm>
-        <url>https://github.com/trobar/visjs.git</url>
-        <connection>scm:git:https://github.com/trobar/visjs.git</connection>
-        <developerConnection>scm:git:https://github.com/trobar/visjs.git</developerConnection>
+        <url>https://github.com/watho/visjs</url>
+        <connection>scm:git:https://github.com/watho/visjs</connection>
+        <developerConnection>scm:git:https://github.com/watho/visjs</developerConnection>
         <tag>Fork of the Visjs add-on for Vaadin</tag>
     </scm>
 
@@ -163,4 +159,6 @@
         </plugins>
     </build>
 
+    <name>VisJs-Vaadin-Addon</name>
+    <url>https://github.com/watho/visjs</url>
 </project>

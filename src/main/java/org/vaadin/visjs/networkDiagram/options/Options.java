@@ -108,6 +108,25 @@ public class Options {
     this.manipulation = manipulation;
   }
 
+  /**
+   * Toggle the manipulation system on or off. Even when false, the manipulation API through the
+   * methods will still work.
+   */
+  public void setManipulationEnabled(final boolean enable) {
+    if (getManipulation() == null) {
+      setManipulation(new Manipulation());
+    }
+    getManipulation().setEnabled(enable);
+  }
+
+  public boolean isManipulationEnabled() {
+    if (getManipulation() != null) {
+      return getManipulation().isEnabled();
+    }
+    // default
+    return false;
+  }
+
   public boolean isClickToUse() {
     return clickToUse;
   }

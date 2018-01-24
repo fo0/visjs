@@ -330,12 +330,9 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
       }
     });
 
-
     // System.out.println(gson.toJson(options));
 
     callFunction("init", gson.toJson(options));
-
-
 
   }
 
@@ -515,6 +512,33 @@ public class NetworkDiagram extends AbstractJavaScriptComponent {
 
   public void drawConnections() {
     callFunction("drawConnections");
+  }
+
+  /**
+   * The scale is the target zoomlevel. Default value is 1.0.
+   *
+   * @param scale
+   */
+  public void moveTo(final Number scale) {
+    if (scale != null && scale.doubleValue() > 0) {
+      callFunction("moveToScale", scale);
+    }
+  }
+
+  /**
+   * The position (in canvas units!) is the position of the central focus point of the camera. The
+   * scale is the target zoomlevel. Default value is 1.0. The offset (in DOM units) is how many
+   * pixels from the center the view is focussed. Default value is {x:0,y:0}.
+   *
+   * @param positionX
+   * @param positionY
+   * @param scale
+   * @param offsetX
+   * @param offsetY
+   */
+  public void moveTo(final int positionX, final int positionY, final Number scale,
+      final int offsetX, final int offsetY) {
+    callFunction("moveTo", positionX, positionY, scale, offsetX, offsetY);
   }
 
   // adding and removing graph listeners

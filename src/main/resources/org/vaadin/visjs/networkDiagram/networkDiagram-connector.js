@@ -122,7 +122,7 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
             
             
       
-            //graph.draw();
+            // graph.draw();
     };
     
     this.setCustomNodeIfAdded = function(b,s1,s2) {
@@ -226,7 +226,16 @@ window.org_vaadin_visjs_networkDiagram_NetworkDiagram = function () {
     this.setSize = function (x,y){
     	graph.setSize(x,y);
     }
-    
+    this.moveToScale = function (scale){
+    	graph.moveTo({"scale": scale});
+    }
+    this.moveTo = function (x,y,scale,offsetX, offsetY){
+    	graph.moveTo({
+    					"position": {x,y},
+    					"scale": scale,
+    					"offset": {offsetX, offsetY}
+    					});    	
+    }
     this.stabalize = function (i){
     	graph.stabalize(i);
     }
