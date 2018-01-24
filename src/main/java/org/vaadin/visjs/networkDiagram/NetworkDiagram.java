@@ -28,6 +28,8 @@ import elemental.json.JsonType;
 
 
 /**
+ * TODO Possibility to add more than one listener or rename methods to setXXXListener.
+ *
  * Created by roshans on 10/10/14. Added callback function, events and graph methods by Martin
  * Prause 9.8.2017
  */
