@@ -4,7 +4,7 @@
 [Vis.js](http://visjs.org) is a dynamic, browser based visualization library. The library uses JSON for configuration and communication. 
 
 ## About this fork
- - Forked from [watho](https://github.com/watho/visjs)
+ - Forked from [watho](https://github.com/watho/visjs). Based on [sameeraroshan](https://github.com/sameeraroshan/visjs)
  - Adding to the Vaadin Directory to add the missing maven integration
  - Let's see what more :-)
 
